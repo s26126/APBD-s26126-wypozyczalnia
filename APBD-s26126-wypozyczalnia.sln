@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APBD-s26126-wypozyczalnia", "APBD-s26126-wypozyczalnia\APBD-s26126-wypozyczalnia.csproj", "{7CE3AA2A-6910-4FC5-8D30-12367C2B8427}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7CE3AA2A-6910-4FC5-8D30-12367C2B8427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CE3AA2A-6910-4FC5-8D30-12367C2B8427}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CE3AA2A-6910-4FC5-8D30-12367C2B8427}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CE3AA2A-6910-4FC5-8D30-12367C2B8427}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
