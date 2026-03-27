@@ -75,7 +75,19 @@ public class Program
         
         service.PrintRentalHistory(usr1);
         
+        Console.WriteLine("\n--- TEST ZWROTÓW ---");
+        service.ReturnEquipment(eq1); // Zwrot w terminie
+        
+        // Symulacja zwrotu po terminie (manualne ustawienie daty końcowej na przeszłość dla eq2)
+        var rental2 = service.GetActiveRental(eq2);
+        if (rental2 != null)
+        {
+            rental2.RentalEndDate = DateTime.Now.AddDays(-5);
+        }
+        service.ReturnEquipment(eq2); // Zwrot po terminie (5 dni spóźnienia)
 
+        service.PrintAvailableEquipment();
+        service.PrintFines();
     }
 }
     

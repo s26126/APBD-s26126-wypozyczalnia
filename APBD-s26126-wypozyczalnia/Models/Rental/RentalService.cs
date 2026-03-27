@@ -49,7 +49,7 @@ public class RentalService
             return false;
         }
 
-        var currentRentals = GetNumberOfRentals(user);
+        var currentRentals = GetActiveRentalsCount(user);
         if (currentRentals >= user.MaxRentals)
         {
             Console.WriteLine($"[BŁĄD] {user.FirstName} {user.LastName} przekroczył limit wypożyczeń ({user.MaxRentals}).");
@@ -67,17 +67,80 @@ public class RentalService
         return true;
     }
 
+    public bool ReturnEquipment(Equipment equipment)
+    {
+        if (equipment == null)
+        {
+            Console.WriteLine("[BŁĄD] Sprzęt nie może być null.");
+            return false;
+        }
+
+        var rental = _rentals.FirstOrDefault(r => r.Equipment == equipment && r.RentalReturnDate == null);
+        if (rental == null)
+        {
+            Console.WriteLine($"[BŁĄD] Nie znaleziono aktywnego wypożyczenia dla sprzętu: {equipment.Name}.");
+            return false;
+        }
+
+        rental.RentalReturnDate = DateTime.Now;
+        equipment.Status = EquipmentStatus.Available;
+
+        if (rental.RentalReturnDate > rental.RentalEndDate)
+        {
+            rental.IsOverdue = true;
+            rental.DaysOverdue = (int)(rental.RentalReturnDate.Value - rental.RentalEndDate.Value).TotalDays;
+            
+            // Przyjmijmy stawkę kary 10 PLN za dzień
+            rental.Fine = rental.DaysOverdue * 10;
+            Console.WriteLine($"[ZWRÓCONO] Sprzęt '{equipment.Name}' został zwrócony z opóźnieniem: {rental.DaysOverdue} dni. Kara: {rental.Fine} PLN.");
+        }
+        else
+        {
+            Console.WriteLine($"[ZWRÓCONO] Sprzęt '{equipment.Name}' został zwrócony w terminie.");
+        }
+
+        return true;
+    }
+
+    public void PrintFines()
+    {
+        Console.WriteLine("\n=====================================================================================");
+        Console.WriteLine("--- NALICZONE KARY ---");
+        var rentalsWithFines = _rentals.Where(r => r.Fine > 0).ToList();
+        if (!rentalsWithFines.Any())
+        {
+            Console.WriteLine("Brak naliczonych kar.");
+        }
+        else
+        {
+            foreach (var rental in rentalsWithFines)
+            {
+                Console.WriteLine($"Użytkownik: {rental.User.FirstName} {rental.User.LastName}, Sprzęt: {rental.Equipment.Name}, Kara: {rental.Fine} PLN (Opóźnienie: {rental.DaysOverdue} dni)");
+            }
+        }
+        Console.WriteLine("=====================================================================================\n");
+    }
+
+    public Rental? GetActiveRental(Equipment equipment)
+    {
+        return _rentals.FirstOrDefault(r => r.Equipment == equipment && r.RentalReturnDate == null);
+    }
+
     public List<Equipment> GetAvailableEquipment()
     {
         return _equipment.Where(e => e.Status == EquipmentStatus.Available).ToList();
     }
 
     
-    public int GetNumberOfRentals(User user)
+    public int GetActiveRentalsCount(User user)
     {
-        if (user == null) { throw new ArgumentNullException("User nie może być null"); }
+        if (user == null)
+        {
+            Console.WriteLine("[BŁĄD] Użytkownik nie może być null.");
+            return 0;
+        }
         
-        return _rentals.Count(r => r.User == user);
+        return _rentals.Count(r => r.User == user && r.RentalReturnDate == null);
     }
     
     public void PrintRentalHistory(User user)

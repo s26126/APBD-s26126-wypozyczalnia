@@ -11,6 +11,7 @@ public class Rental
     public Equipment Equipment { get; set; }
     public int DaysOverdue { get; set; }
     public bool IsOverdue { get; set; }
+    public decimal Fine { get; set; }
     
 
 
