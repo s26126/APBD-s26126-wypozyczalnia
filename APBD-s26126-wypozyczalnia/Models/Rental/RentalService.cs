@@ -17,36 +17,80 @@ public class RentalService
     }
     public void PrintAllUsers()
     {
+        Console.WriteLine("\n=====================================================================================");
         Console.WriteLine("--- ZAREJESTROWANI UŻYTKOWNICY ---");
         _users.ForEach(Console.WriteLine);
+        Console.WriteLine("=====================================================================================\n");
     }
     public void PrintAllEquipment()
     {
-        Console.WriteLine("\n--- ZAREJESTROWANY SPRZĘT ---");
+        Console.WriteLine("\n=====================================================================================");
+        Console.WriteLine("--- ZAREJESTROWANY SPRZĘT ---");
         _equipment.ForEach(Console.WriteLine);
+        Console.WriteLine("=====================================================================================\n");
     }
     
     public void PrintAvailableEquipment()
     {
-        Console.WriteLine("\n--- DOSTĘPNE SPRZĘT ---");
+        Console.WriteLine("\n=====================================================================================");
+        Console.WriteLine("--- DOSTĘPNE SPRZĘT ---");
         foreach (var e in GetAvailableEquipment())
         {
             Console.WriteLine(e);
         }
+        Console.WriteLine("=====================================================================================\n");
     }
+
+    public bool AddRental(User user, Equipment equipment)
+    {
+        if (user is null || equipment is null)
+        {
+            Console.WriteLine("[BŁĄD] Użytkownik lub sprzęt nie może być null.");
+            return false;
+        }
+
+        var currentRentals = GetNumberOfRentals(user);
+        if (currentRentals >= user.MaxRentals)
+        {
+            Console.WriteLine($"[BŁĄD] {user.FirstName} {user.LastName} przekroczył limit wypożyczeń ({user.MaxRentals}).");
+            return false;
+        }
+
+        if (equipment.Status != EquipmentStatus.Available)
+        {
+            Console.WriteLine($"[BŁĄD] Sprzęt '{equipment.Name}' jest obecnie niedostępny (Status: {equipment.Status}).");
+            return false;
+        }
+
+        _rentals.Add(new Rental(user, equipment));
+        Console.WriteLine($"[SUKCES] Wypożyczono {equipment.Name} użytkownikowi {user.FirstName} {user.LastName}.");
+        return true;
+    }
+
     public List<Equipment> GetAvailableEquipment()
     {
         return _equipment.Where(e => e.Status == EquipmentStatus.Available).ToList();
     }
 
-    public void AddRental(User user, Equipment equipment)
+    
+    public int GetNumberOfRentals(User user)
     {
-        if (user == null || equipment == null)
-        {
-            throw new ArgumentException("User i equipment nie może być null");
-        }
+        if (user == null) { throw new ArgumentNullException("User nie może być null"); }
         
-        _rentals.Add(new Rental(user, equipment));
+        return _rentals.Count(r => r.User == user);
+    }
+    
+    public void PrintRentalHistory(User user)
+    {
+        Console.WriteLine("\n=====================================================================================");
+        Console.WriteLine($"--- Historia wypożyczeń użytkownika {user.FirstName} {user.LastName} ---");
+        foreach (var rental in _rentals.Where(r => r.User == user))
+        {
+            Console.WriteLine($"Data wypożyczenia: {rental.RentalStartDate}, Data zwrotu: {rental.RentalEndDate}, Sprzęt: {rental.Equipment.Name}");
+        }
+        Console.WriteLine("=====================================================================================\n");
     }
     
 }
+
+

@@ -64,12 +64,17 @@ public class Program
         service.PrintAvailableEquipment();
 
         service.AddRental(usr1, eq1);
+        service.AddRental(usr1, eq2);
         service.AddRental(usr2, eq2);
         service.AddRental(usr3, eq3);
         service.AddRental(usr4, eq4);
         service.AddRental(usr5, eq5);
 
         service.PrintAvailableEquipment();
+        service.PrintAllEquipment();
+        
+        service.PrintRentalHistory(usr1);
+        
 
     }
 }

@@ -9,6 +9,8 @@ public class Rental
     public DateTime? RentalEndDate { get; set; }
     public User User { get; set; }
     public Equipment Equipment { get; set; }
+    public int DaysOverdue { get; set; }
+    public bool IsOverdue { get; set; }
     
 
 
