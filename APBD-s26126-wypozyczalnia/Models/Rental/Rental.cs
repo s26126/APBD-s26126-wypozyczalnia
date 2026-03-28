@@ -11,7 +11,7 @@ public class Rental
     public Equipment Equipment { get; set; }
     public int DaysOverdue { get; set; }
     public bool IsOverdue { get; set; }
-    public decimal Fine { get; set; }
+    public decimal? Fine { get; set; }
     
 
 
@@ -23,6 +23,7 @@ public class Rental
         RentalReturnDate = null;
         RentalEndDate = DateTime.Now.AddDays(14);
         equipment.Status = EquipmentStatus.Rented;
+        Fine = null;
         
     }
     

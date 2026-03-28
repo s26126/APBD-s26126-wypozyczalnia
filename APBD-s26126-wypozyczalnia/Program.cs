@@ -82,10 +82,23 @@ public class Program
             rental2.RentalEndDate = DateTime.Now.AddDays(-5);
         }
         service.ReturnEquipment(eq2); // Zwrot po terminie (5 dni spóźnienia)
+        
+        // Symulacja sprzętu aktualnie przetrzymywanego (termin minął, ale nie został zwrócony)
+        var rental3 = service.GetActiveRental(eq3);
+        if (rental3 != null)
+        {
+            rental3.RentalEndDate = DateTime.Now.AddDays(-2);
+        }
 
         printer.PrintAvailableEquipment();
+        printer.PrintOverdueRentals();
         printer.PrintFines();
+
+
+        service.MarkEquipmentAsUnavailable(eq6, "Użytkownik sprawdzał czy aparat jest wodoodporny");
         
+        
+        printer.PrintSummaryReport();
     }
 }
     
