@@ -6,7 +6,11 @@ public class RentalService
     private List<User> _users = new List<User>();
     private List<Equipment> _equipment = new List<Equipment>();
     private List<Rental> _rentals = new List<Rental>();
-    
+
+    public List<User> Users => _users;
+    public List<Equipment> Equipment => _equipment;
+    public List<Rental> Rentals => _rentals;
+
     public void AddUser(User user)
     {
         _users.Add(user);
@@ -15,32 +19,7 @@ public class RentalService
     {
         _equipment.Add(equipment);
     }
-    public void PrintAllUsers()
-    {
-        Console.WriteLine("\n=====================================================================================");
-        Console.WriteLine("--- ZAREJESTROWANI UŻYTKOWNICY ---");
-        _users.ForEach(Console.WriteLine);
-        Console.WriteLine("=====================================================================================\n");
-    }
-    public void PrintAllEquipment()
-    {
-        Console.WriteLine("\n=====================================================================================");
-        Console.WriteLine("--- ZAREJESTROWANY SPRZĘT ---");
-        _equipment.ForEach(Console.WriteLine);
-        Console.WriteLine("=====================================================================================\n");
-    }
     
-    public void PrintAvailableEquipment()
-    {
-        Console.WriteLine("\n=====================================================================================");
-        Console.WriteLine("--- DOSTĘPNE SPRZĘT ---");
-        foreach (var e in GetAvailableEquipment())
-        {
-            Console.WriteLine(e);
-        }
-        Console.WriteLine("=====================================================================================\n");
-    }
-
     public bool AddRental(User user, Equipment equipment)
     {
         if (user is null || equipment is null)
@@ -102,25 +81,6 @@ public class RentalService
         return true;
     }
 
-    public void PrintFines()
-    {
-        Console.WriteLine("\n=====================================================================================");
-        Console.WriteLine("--- NALICZONE KARY ---");
-        var rentalsWithFines = _rentals.Where(r => r.Fine > 0).ToList();
-        if (!rentalsWithFines.Any())
-        {
-            Console.WriteLine("Brak naliczonych kar.");
-        }
-        else
-        {
-            foreach (var rental in rentalsWithFines)
-            {
-                Console.WriteLine($"Użytkownik: {rental.User.FirstName} {rental.User.LastName}, Sprzęt: {rental.Equipment.Name}, Kara: {rental.Fine} PLN (Opóźnienie: {rental.DaysOverdue} dni)");
-            }
-        }
-        Console.WriteLine("=====================================================================================\n");
-    }
-
     public Rental? GetActiveRental(Equipment equipment)
     {
         return _rentals.FirstOrDefault(r => r.Equipment == equipment && r.RentalReturnDate == null);
@@ -142,18 +102,6 @@ public class RentalService
         
         return _rentals.Count(r => r.User == user && r.RentalReturnDate == null);
     }
-    
-    public void PrintRentalHistory(User user)
-    {
-        Console.WriteLine("\n=====================================================================================");
-        Console.WriteLine($"--- Historia wypożyczeń użytkownika {user.FirstName} {user.LastName} ---");
-        foreach (var rental in _rentals.Where(r => r.User == user))
-        {
-            Console.WriteLine($"Data wypożyczenia: {rental.RentalStartDate}, Data zwrotu: {rental.RentalEndDate}, Sprzęt: {rental.Equipment.Name}");
-        }
-        Console.WriteLine("=====================================================================================\n");
-    }
-    
 }
 
 

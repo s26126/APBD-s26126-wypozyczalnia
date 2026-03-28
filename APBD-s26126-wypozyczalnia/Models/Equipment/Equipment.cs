@@ -5,7 +5,9 @@ public enum EquipmentStatus
 {
     Available,
     Rented,
-    Reserved
+    Reserved,
+    Damaged,
+    InRepair
 }
 
 public abstract class Equipment

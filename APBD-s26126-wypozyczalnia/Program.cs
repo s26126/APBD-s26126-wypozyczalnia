@@ -9,6 +9,7 @@ public class Program
     public static void Main(string[] args)
     {
         var service = new RentalService();
+        var printer = new RentalPrinter(service);
 
         var usr1 = new Student("Jan", "Kowalski");
         var usr2 = new Student("Anna", "Nowak");
@@ -55,14 +56,11 @@ public class Program
 
 
 
-        // service.PrintAllUsers();
-        // service.PrintAllEquipment();
+        // printer.PrintAllUsers();
+        // printer.PrintAllEquipment();
+        // printer.PrintAvailableEquipment();
 
-
-
-
-        service.PrintAvailableEquipment();
-
+        // dodanie nowych wypożyczeń
         service.AddRental(usr1, eq1);
         service.AddRental(usr1, eq2);
         service.AddRental(usr2, eq2);
@@ -70,14 +68,13 @@ public class Program
         service.AddRental(usr4, eq4);
         service.AddRental(usr5, eq5);
 
-        service.PrintAvailableEquipment();
-        service.PrintAllEquipment();
         
-        service.PrintRentalHistory(usr1);
+        printer.PrintAvailableEquipment();
+        printer.PrintAllEquipment();
+        printer.PrintRentalHistory(usr1);
         
         Console.WriteLine("\n--- TEST ZWROTÓW ---");
         service.ReturnEquipment(eq1); // Zwrot w terminie
-        
         // Symulacja zwrotu po terminie (manualne ustawienie daty końcowej na przeszłość dla eq2)
         var rental2 = service.GetActiveRental(eq2);
         if (rental2 != null)
@@ -86,8 +83,9 @@ public class Program
         }
         service.ReturnEquipment(eq2); // Zwrot po terminie (5 dni spóźnienia)
 
-        service.PrintAvailableEquipment();
-        service.PrintFines();
+        printer.PrintAvailableEquipment();
+        printer.PrintFines();
+        
     }
 }
     
