@@ -5,7 +5,9 @@ public enum EquipmentStatus
 {
     Available,
     Rented,
-    Reserved
+    Reserved,
+    Unavailable 
+    
 }
 
 public abstract class Equipment
@@ -13,7 +15,7 @@ public abstract class Equipment
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Name { get; set; }
     public EquipmentStatus Status { get; set; } = EquipmentStatus.Available;
-
+    public String? ReasonOfUnavailable { get; set; } = null;
     
     protected Equipment(string name)
     {
