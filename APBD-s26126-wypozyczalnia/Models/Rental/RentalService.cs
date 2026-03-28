@@ -70,7 +70,6 @@ public class RentalService
             rental.IsOverdue = true;
             rental.DaysOverdue = (int)(rental.RentalReturnDate.Value - rental.RentalEndDate.Value).TotalDays;
             
-            // 10 PLN kary za dzień opóźnienia
             rental.Fine = rental.DaysOverdue * penaltyValue;
             Console.WriteLine($"[ZWRÓCONO] Sprzęt '{equipment.Name}' został zwrócony z opóźnieniem: {rental.DaysOverdue} dni. Kara: {rental.Fine} PLN.");
         }
